@@ -1,13 +1,18 @@
 #include "tests.h"
+#include <iostream>
 
+using namespace std;
 // 练习1，实现库函数strlen
 int my_strlen(char *str) {
     /**
      * 统计字符串的长度，太简单了。
      */
-
+    
     // IMPLEMENT YOUR CODE HERE
-    return 0;
+    char *copy;
+    for (copy = str; *copy; ++copy){
+    }
+    return (copy - str);
 }
 
 
@@ -17,8 +22,14 @@ void my_strcat(char *str_1, char *str_2) {
      * 将字符串str_2拼接到str_1之后，我们保证str_1指向的内存空间足够用于添加str_2。
      * 注意结束符'\0'的处理。
      */
-
     // IMPLEMENT YOUR CODE HERE
+    int length1 = my_strlen(str_1);
+    int length2 = my_strlen(str_2);
+    *(str_1+length1) = *str_2;
+    for (int i = 1; i <= length2; i++){
+        *(str_1+length1 + i) = *(str_2 + i);
+    }
+    
 }
 
 
@@ -29,8 +40,27 @@ char* my_strstr(char *s, char *p) {
      * 例如：
      * s = "123456", p = "34"，应该返回指向字符'3'的指针。
      */
-
     // IMPLEMENT YOUR CODE HERE
+    int length_s = my_strlen(s);
+    int length_p = my_strlen(p);
+    for (int i = 0; i < length_s; i++)
+    {
+        if (*(s+i)==*p){
+            bool isMatch = 1;
+            for (int j =0; j < length_p; j++){
+                
+                if (*(s+j+i) != *(p + j))
+                {
+                    isMatch = 0;
+                    break;
+                }
+            }
+            if (isMatch){
+                return (s + i);
+            }
+        }
+    }
+        
     return 0;
 }
 
