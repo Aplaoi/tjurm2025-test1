@@ -233,8 +233,36 @@ void resize(float *in, float *out, int h, int w, int c, float scale) {
      */
 
     int new_h = h * scale, new_w = w * scale;
-    // IMPLEMENT YOUR CODE HERE
+    int elements = h * w * c;
 
+    for (int y = 0; y < new_h; y++){
+        for (int x = 0; x < new_w; x++){
+            for (int channel = 0; channel < c; channel++){
+                float srcX = x / scale;
+                float srcY = y / scale;
+                int srcX0 = static_cast<int>(srcX);
+                int srcY0 = static_cast<int>(srcY);
+                int srcX1 = std::min(srcX0 + 1, w - 1);
+                int srcY1 = std::min(srcY0 + 1, h - 1);
+
+                float dx = srcX - srcX0;
+                float dy = srcY - srcY0;
+
+                float value00 = in[(srcY0 * w + srcX0) * c + channel];
+                float value01 = in[(srcY1 * w + srcX0) * c + channel];
+                float value10 = in[(srcY0 * w + srcX1) * c + channel];
+                float value11 = in[(srcY1 * w + srcX1) * c + channel];
+
+                float newValue = (1 - dx) * (1 - dy) * value00 +
+                                          dx * (1 - dy) * value10 +
+                                          (1 - dx) * dy * value01 +
+                                          dx * dy * value11;
+
+                out[(y * new_w + x) * c + channel] = newValue;
+            }
+        }
+    }
+    // IMPLEMENT YOUR CODE HERE
 }
 
 
