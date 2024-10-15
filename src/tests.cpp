@@ -1,6 +1,7 @@
 #include "tests.h"
-#include <iostream>
-
+#include <cmath>
+#include <vector>
+// #include <unordered_map>
 using namespace std;
 // 练习1，实现库函数strlen
 int my_strlen(char *str) {
@@ -233,11 +234,11 @@ void resize(float *in, float *out, int h, int w, int c, float scale) {
 
     int new_h = h * scale, new_w = w * scale;
     // IMPLEMENT YOUR CODE HERE
-    
+
 }
 
 
-// 练习6，实现图像处理算法：直方图均衡化
+//练习6，实现图像处理算法：直方图均衡化
 void hist_eq(float *in, int h, int w) {
     /**
      * 将输入图片进行直方图均衡化处理。参数含义：
@@ -256,4 +257,25 @@ void hist_eq(float *in, int h, int w) {
      */
 
     // IMPLEMENT YOUR CODE HERE
+    int pixel = h * w;
+    //生成长度为256的动态数组histogram，其每位值都是0
+    vector<int> histogram(256,0);
+    vector<float> frequency = {};
+    // 统计灰度直方图
+    for (int i = 0; i < pixel; i++){
+        int grey = static_cast<int>(in[i]);
+        histogram[grey] += 1;
+    }
+    //计算频率
+    for (int i = 0; i <= 255; i++){
+        frequency.push_back(histogram[i]/static_cast<float>(pixel));
+    }
+    //计算累计频率
+    for (int i = 0; i < 255; i++){
+        frequency[i + 1] += frequency[i];
+    }
+    //得到均衡化的灰度值
+    for (int i = 0; i < pixel; i++){
+        in[i] = frequency[static_cast<int>(in[i])] * 255;
+    }
 }
